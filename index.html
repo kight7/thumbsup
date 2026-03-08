@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>👍🏻 Good Vibes Only</title>
+  <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Fredoka+One&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #FFF8F0;
+      --pink:  #FFB5C8;
+      --mint:  #B5EAD7;
+      --lemon: #FFF0A0;
+      --lilac: #D4B5FF;
+      --peach: #FFCBA4;
+      --blue:  #AEE4FF;
+    }
+
+    body {
+      background-color: var(--cream);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fredoka One', cursive;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Soft pastel blob backgrounds */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 40% 30% at 20% 20%, #FFD6E0 0%, transparent 70%),
+        radial-gradient(ellipse 35% 25% at 80% 15%, #D6F0FF 0%, transparent 70%),
+        radial-gradient(ellipse 30% 35% at 75% 80%, #D6FFE8 0%, transparent 70%),
+        radial-gradient(ellipse 40% 25% at 15% 75%, #FFF0C0 0%, transparent 70%),
+        radial-gradient(ellipse 25% 30% at 50% 50%, #EDD6FF 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── BUTTON ── */
+    #main-btn {
+      position: relative;
+      z-index: 10;
+      font-family: 'Boogaloo', cursive;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      letter-spacing: 0.04em;
+      color: #3a2f4a;
+      background: var(--pink);
+      border: 3px solid #3a2f4a;
+      border-radius: 999px;
+      padding: 1rem 3rem;
+      cursor: pointer;
+      box-shadow: 5px 5px 0 #3a2f4a;
+      transition: transform 0.1s, box-shadow 0.1s, background 0.3s;
+      user-select: none;
+      animation: bob 2.5s ease-in-out infinite;
+    }
+
+    #main-btn:hover {
+      background: var(--lilac);
+      transform: translate(-2px, -2px);
+      box-shadow: 7px 7px 0 #3a2f4a;
+    }
+
+    #main-btn:active {
+      transform: translate(3px, 3px);
+      box-shadow: 2px 2px 0 #3a2f4a;
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0);   }
+      50%       { transform: translateY(-8px); }
+    }
+
+    /* ── BIG CENTRE EMOJI ── */
+    #big-thumb {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      font-size: min(50vw, 50vh);
+      line-height: 1;
+      z-index: 20;
+      pointer-events: none;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      filter: drop-shadow(0 0 40px rgba(255,181,200,0.8));
+    }
+
+    #big-thumb.show {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* ── FALLING EMOJIS ── */
+    .raindrop {
+      position: fixed;
+      top: -80px;
+      font-size: 2.5rem;
+      pointer-events: none;
+      z-index: 15;
+      animation: fall linear forwards;
+      will-change: transform, opacity;
+    }
+
+    @keyframes fall {
+      0%   { transform: translateY(0)    rotate(0deg);   opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ── CONFETTI BURST ── */
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 25;
+      animation: confetti-fly 1s ease-out forwards;
+    }
+
+    @keyframes confetti-fly {
+      0%   { opacity: 1; transform: translate(0,0) rotate(0deg) scale(1); }
+      100% { opacity: 0; transform: translate(var(--tx), var(--ty)) rotate(var(--r)) scale(0.3); }
+    }
+  </style>
+</head>
+<body>
+
+  <button id="main-btn">click me!! 🎉</button>
+  <div id="big-thumb">👍🏻</div>
+
+  <script>
+    const btn      = document.getElementById('main-btn');
+    const bigThumb = document.getElementById('big-thumb');
+    let raining    = false;
+    let rainTimer  = null;
+
+    const COLORS = ['#FFB5C8','#B5EAD7','#FFF0A0','#D4B5FF','#FFCBA4','#AEE4FF','#FF9DC8','#9DE8C4'];
+
+    /* ── confetti burst ── */
+    function burst(cx, cy) {
+      for (let i = 0; i < 28; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti';
+        const angle = Math.random() * 360;
+        const dist  = 80 + Math.random() * 160;
+        el.style.cssText = `
+          left:${cx}px; top:${cy}px;
+          background:${COLORS[Math.floor(Math.random()*COLORS.length)]};
+          --tx:${Math.cos(angle*Math.PI/180)*dist}px;
+          --ty:${Math.sin(angle*Math.PI/180)*dist}px;
+          --r:${Math.random()*720-360}deg;
+          animation-duration:${0.6+Math.random()*0.6}s;
+          border-radius:${Math.random()>0.5?'50%':'2px'};
+        `;
+        document.body.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
+      }
+    }
+
+    /* ── single falling emoji ── */
+    function spawnDrop() {
+      const el = document.createElement('span');
+      el.className  = 'raindrop';
+      const sizes   = ['1.8rem','2.4rem','3rem','3.6rem','4rem'];
+      el.textContent = '👍🏻';
+      el.style.left  = Math.random() * 100 + 'vw';
+      el.style.fontSize = sizes[Math.floor(Math.random()*sizes.length)];
+      const dur = 2 + Math.random() * 3;
+      el.style.animationDuration = dur + 's';
+      el.style.animationDelay    = Math.random() * 0.5 + 's';
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }
+
+    /* ── rain loop ── */
+    function startRain() {
+      if (raining) return;
+      raining = true;
+
+      // rapid burst first
+      for (let i = 0; i < 20; i++) {
+        setTimeout(spawnDrop, i * 60);
+      }
+
+      // then steady drizzle
+      rainTimer = setInterval(() => {
+        const count = 3 + Math.floor(Math.random() * 3);
+        for (let i = 0; i < count; i++) spawnDrop();
+      }, 300);
+    }
+
+    /* ── click handler ── */
+    btn.addEventListener('click', (e) => {
+      // confetti from button
+      const r = btn.getBoundingClientRect();
+      burst(r.left + r.width/2, r.top + r.height/2);
+
+      // show big thumb
+      bigThumb.classList.add('show');
+
+      // hide button
+      btn.style.opacity = '0';
+      btn.style.pointerEvents = 'none';
+
+      // start rain
+      startRain();
+    });
+  </script>
+</body>
+</html>
