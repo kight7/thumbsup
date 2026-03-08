@@ -142,6 +142,10 @@
     let raining    = false;
     let rainTimer  = null;
 
+    // preload audio
+    const audio = new Audio('faaa.mp3');
+    audio.preload = 'auto';
+
     const COLORS = ['#FFB5C8','#B5EAD7','#FFF0A0','#D4B5FF','#FFCBA4','#AEE4FF','#FF9DC8','#9DE8C4'];
 
     /* ── confetti burst ── */
@@ -200,8 +204,8 @@
     /* ── click handler ── */
     btn.addEventListener('click', (e) => {
       // play sound
-      const audio = new Audio('faaa.mp3');
-      audio.play();
+      audio.currentTime = 0;
+      audio.play().catch(e => console.log('Audio error:', e));
 
       // confetti from button
       const r = btn.getBoundingClientRect();
