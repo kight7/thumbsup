@@ -133,7 +133,7 @@
 </head>
 <body>
 
-  <button id="main-btn">click me!! 🎉</button>
+  <button id="main-btn">yaha click karo parth 👀</button>
   <div id="big-thumb">👍🏻</div>
 
   <script>
@@ -170,7 +170,7 @@
       const el = document.createElement('span');
       el.className  = 'raindrop';
       const sizes   = ['1.8rem','2.4rem','3rem','3.6rem','4rem'];
-      el.textContent = '👍🏻';
+      el.textContent = Math.random() > 0.4 ? '👍🏻' : '👊🏻';
       el.style.left  = Math.random() * 100 + 'vw';
       el.style.fontSize = sizes[Math.floor(Math.random()*sizes.length)];
       const dur = 2 + Math.random() * 3;
