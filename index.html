@@ -199,6 +199,10 @@
 
     /* ── click handler ── */
     btn.addEventListener('click', (e) => {
+      // play sound
+      const audio = new Audio('faaa.mp3');
+      audio.play();
+
       // confetti from button
       const r = btn.getBoundingClientRect();
       burst(r.left + r.width/2, r.top + r.height/2);
